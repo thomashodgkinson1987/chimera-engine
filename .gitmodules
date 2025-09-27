@@ -1,0 +1,12 @@
+[submodule "lib/raylib"]
+	path = lib/raylib
+	url = https://github.com/thomashodgkinson1987/raylib.git
+[submodule "vendor/flecs"]
+	path = vendor/flecs
+	url = https://github.com/thomashodgkinson1987/flecs.git
+[submodule "common/array_macros"]
+	path = common/array_macros
+	url = https://github.com/thomashodgkinson1987/array_macros.git
+[submodule "common/queue-macros"]
+	path = common/queue-macros
+	url = https://github.com/thomashodgkinson1987/queue-macros.git

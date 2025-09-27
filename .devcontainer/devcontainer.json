@@ -1,0 +1,42 @@
+{
+    "name": "Chimera Engine Build Environment",
+
+    "build": {
+        "dockerfile": "../Dockerfile",
+        "context": "..",
+        "target": "dev"
+    },
+
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/chimera-engine,type=bind,Z",
+    "workspaceFolder": "/workspaces/chimera-engine",
+
+    "runArgs": [
+        "--ipc=host",
+        "--network=host",
+        "-v", "/tmp/.X11-unix:/tmp/.X11-unix:ro",
+        "-v", "${localEnv:XAUTHORITY}:/home/vscode/.Xauthority:ro",
+        "-v", "${localEnv:HOME}/.gitconfig:/home/vscode/.gitconfig:ro",
+        "-v", "${localEnv:SSH_AUTH_SOCK}:${localEnv:SSH_AUTH_SOCK}"
+    ],
+
+    "containerEnv": {
+        "BUILD_CONTEXT": "container",
+        "DISPLAY": "${localEnv:DISPLAY}",
+        "XAUTHORITY": "/home/vscode/.Xauthority",
+        "SSH_AUTH_SOCK": "${localEnv:SSH_AUTH_SOCK}"
+    },
+
+    "remoteUser": "vscode",
+    "updateRemoteUserUID": true,
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools-extension-pack",
+                "github.vscode-github-actions"
+            ]
+        }
+    },
+
+    "postCreateCommand": "sudo git config --system --add safe.directory /workspaces/chimera-engine"
+}

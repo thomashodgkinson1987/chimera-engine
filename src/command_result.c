@@ -1,0 +1,287 @@
+/*
+ * Chimera Engine
+ * Copyright (C) 2025  Thomas George Hodgkinson
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include "command_result.h"
+
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "actor.h"
+#include "colour.h"
+#include "log.h"
+
+// --- Public Function Definitions ---
+CommandResult command_result_none_create(void)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_NONE;
+
+    return result;
+}
+CommandResult command_result_actor_set_x_create(
+    Actor *actor,
+    int old_x,
+    int new_x)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_ACTOR_SET_X;
+    result.params.actor_set_x.actor = actor;
+    result.params.actor_set_x.old_x = old_x;
+    result.params.actor_set_x.new_x = new_x;
+
+    return result;
+}
+CommandResult command_result_actor_set_y_create(
+    Actor *actor,
+    int old_y,
+    int new_y)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_ACTOR_SET_Y;
+    result.params.actor_set_y.actor = actor;
+    result.params.actor_set_y.old_y = old_y;
+    result.params.actor_set_y.new_y = new_y;
+
+    return result;
+}
+CommandResult command_result_actor_set_position_create(
+    Actor *actor,
+    int old_x,
+    int old_y,
+    int new_x,
+    int new_y)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_ACTOR_SET_POSITION;
+    result.params.actor_set_position.actor = actor;
+    result.params.actor_set_position.old_x = old_x;
+    result.params.actor_set_position.old_y = old_y;
+    result.params.actor_set_position.new_x = new_x;
+    result.params.actor_set_position.new_y = new_y;
+
+    return result;
+}
+CommandResult command_result_actor_set_glyph_create(
+    Actor *actor,
+    char old_glyph,
+    char new_glyph)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_ACTOR_SET_GLYPH;
+    result.params.actor_set_glyph.actor = actor;
+    result.params.actor_set_glyph.old_glyph = old_glyph;
+    result.params.actor_set_glyph.new_glyph = new_glyph;
+
+    return result;
+}
+CommandResult command_result_actor_set_colour_create(
+    Actor *actor,
+    Colour old_colour,
+    Colour new_colour)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_ACTOR_SET_COLOUR;
+    result.params.actor_set_colour.actor = actor;
+    result.params.actor_set_colour.old_colour = old_colour;
+    result.params.actor_set_colour.new_colour = new_colour;
+
+    return result;
+}
+CommandResult command_result_actor_set_r_create(
+    Actor *actor,
+    unsigned char old_r,
+    unsigned char new_r)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_ACTOR_SET_R;
+    result.params.actor_set_r.actor = actor;
+    result.params.actor_set_r.old_r = old_r;
+    result.params.actor_set_r.new_r = new_r;
+
+    return result;
+}
+CommandResult command_result_actor_set_g_create(
+    Actor *actor,
+    unsigned char old_g,
+    unsigned char new_g)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_ACTOR_SET_G;
+    result.params.actor_set_g.actor = actor;
+    result.params.actor_set_g.old_g = old_g;
+    result.params.actor_set_g.new_g = new_g;
+
+    return result;
+}
+CommandResult command_result_actor_set_b_create(
+    Actor *actor,
+    unsigned char old_b,
+    unsigned char new_b)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_ACTOR_SET_B;
+    result.params.actor_set_b.actor = actor;
+    result.params.actor_set_b.old_b = old_b;
+    result.params.actor_set_b.new_b = new_b;
+
+    return result;
+}
+CommandResult command_result_actor_set_a_create(
+    Actor *actor,
+    unsigned char old_a,
+    unsigned char new_a)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_ACTOR_SET_A;
+    result.params.actor_set_a.actor = actor;
+    result.params.actor_set_a.old_a = old_a;
+    result.params.actor_set_a.new_a = new_a;
+
+    return result;
+}
+CommandResult command_result_actor_set_current_hp_create(
+    Actor *actor,
+    int old_current_hp,
+    int new_current_hp)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_ACTOR_SET_CURRENT_HP;
+    result.params.actor_set_current_hp.actor = actor;
+    result.params.actor_set_current_hp.old_current_hp = old_current_hp;
+    result.params.actor_set_current_hp.new_current_hp = new_current_hp;
+
+    return result;
+}
+CommandResult command_result_actor_set_max_hp_create(
+    Actor *actor,
+    int old_max_hp,
+    int new_max_hp)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_ACTOR_SET_MAX_HP;
+    result.params.actor_set_max_hp.actor = actor;
+    result.params.actor_set_max_hp.old_max_hp = old_max_hp;
+    result.params.actor_set_max_hp.new_max_hp = new_max_hp;
+
+    return result;
+}
+CommandResult command_result_actor_set_hp_create(
+    Actor *actor,
+    int old_current_hp,
+    int old_max_hp,
+    int new_current_hp,
+    int new_max_hp)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_ACTOR_SET_HP;
+    result.params.actor_set_hp.actor = actor;
+    result.params.actor_set_hp.old_current_hp = old_current_hp;
+    result.params.actor_set_hp.old_max_hp = old_max_hp;
+    result.params.actor_set_hp.new_current_hp = new_current_hp;
+    result.params.actor_set_hp.new_max_hp = new_max_hp;
+
+    return result;
+}
+CommandResult command_result_actor_set_attack_power_create(
+    Actor *actor,
+    int old_attack_power,
+    int new_attack_power)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_ACTOR_SET_ATTACK_POWER;
+    result.params.actor_set_attack_power.actor = actor;
+    result.params.actor_set_attack_power.old_attack_power = old_attack_power;
+    result.params.actor_set_attack_power.new_attack_power = new_attack_power;
+
+    return result;
+}
+CommandResult command_result_actor_set_name_create(
+    Actor *actor,
+    const char *old_name,
+    const char *new_name)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_ACTOR_SET_NAME;
+    result.params.actor_set_name.actor = actor;
+    result.params.actor_set_name.old_name = strdup(old_name);
+    if (!result.params.actor_set_name.old_name)
+    {
+        log_perror("Old name allocation failure");
+        log_fatal(
+            "%s: Fatal error due to old name allocation failure",
+            __func__);
+    }
+    result.params.actor_set_name.new_name = strdup(new_name);
+    if (!result.params.actor_set_name.new_name)
+    {
+        log_perror("New name allocation failure");
+        log_fatal(
+            "%s: Fatal error due to new name allocation failure",
+            __func__);
+    }
+
+    return result;
+}
+CommandResult command_result_actor_took_damage_create(
+    Actor *actor,
+    int amount,
+    bool did_die)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_ACTOR_TOOK_DAMAGE;
+    result.params.actor_took_damage.actor = actor;
+    result.params.actor_took_damage.amount = amount;
+    result.params.actor_took_damage.did_die = did_die;
+
+    return result;
+}
+CommandResult command_result_game_quit_create(void)
+{
+    CommandResult result = {0};
+    result.type = COMMAND_RESULT_TYPE_GAME_QUIT;
+
+    return result;
+}
+
+void command_result_free(CommandResult *result)
+{
+    if (
+        result->type >= COMMAND_RESULT_TYPE_NONE &&
+        result->type < COMMAND_RESULT_TYPE_COUNT)
+    {
+        switch (result->type)
+        {
+        case COMMAND_RESULT_TYPE_ACTOR_SET_NAME:
+        {
+            free(result->params.actor_set_name.old_name);
+            free(result->params.actor_set_name.new_name);
+            break;
+        }
+        }
+    }
+    else
+    {
+        log_message(
+            LOG_LEVEL_FATAL,
+            "%s: Invalid command result type [%d]",
+            __func__,
+            result->type);
+    }
+}

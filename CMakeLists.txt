@@ -2,17 +2,11 @@ cmake_minimum_required(VERSION 3.15)
 
 # --- Project and C Standard Setup ---
 project(ChimeraEngine VERSION 1.0 LANGUAGES C)
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/lib")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/lib")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/bin")
-
-# --- Add Subdirectories for Dependencies ---
-add_subdirectory(lib/raylib)
-add_subdirectory(vendor/flecs)
-add_subdirectory(common/array_macros)
-add_subdirectory(common/queue-macros)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/lib")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/lib")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/bin")
 
 # --- Main Executable Target ---
 add_executable(ChimeraEngine)
@@ -38,6 +32,12 @@ target_sources(ChimeraEngine
     src/world.c
 )
 
+# --- Add Subdirectories for Dependencies ---
+add_subdirectory(lib/raylib)
+add_subdirectory(vendor/flecs)
+add_subdirectory(common/array-macros)
+add_subdirectory(common/queue-macros)
+
 # --- Configure Target Properties (Includes, Links, etc.) ---
 target_include_directories(ChimeraEngine PRIVATE include)
 
@@ -51,8 +51,8 @@ target_link_libraries(ChimeraEngine
     PRIVATE
     raylib
     flecs
-    array_macros
-    queue_macros
+    array-macros
+    queue-macros
     ${SYSTEM_LIBS}
 )
 

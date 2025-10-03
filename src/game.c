@@ -105,13 +105,18 @@ void game_run(Game *game)
             ProcessResult result = command_system_process_queue(
                 game->command_system,
                 game->world);
-            game->current_state = GAME_STATE_ENEMY_TURN;
             if (result.is_redraw)
             {
                 renderer_set_dirty(game->renderer);
             }
             if (result.did_quit)
+            {
                 game->current_state = GAME_STATE_QUIT;
+            }
+            else
+            {
+                game->current_state = GAME_STATE_ENEMY_TURN;
+            }
             break;
         }
         case GAME_STATE_ENEMY_TURN:

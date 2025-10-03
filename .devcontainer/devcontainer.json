@@ -4,7 +4,7 @@
     "build": {
         "dockerfile": "../Dockerfile",
         "context": "..",
-        "target": "dev"
+        "target": "base"
     },
 
     "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/chimera-engine,type=bind,Z",

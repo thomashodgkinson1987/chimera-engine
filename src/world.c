@@ -36,7 +36,7 @@ struct world
     int width;
     int height;
     Tile *tiles;
-    ActorArray actors;
+    ActorArray *actors;
 };
 
 // --- Public Function Definitions ---
@@ -103,12 +103,13 @@ World *world_create(int width, int height)
 }
 void world_free(World *world)
 {
-    for (size_t i = 0; i < actor_array_get_count(&world->actors); ++i)
+    for (size_t i = 0; i < actor_array_get_count(world->actors); ++i)
     {
-        Actor *actor = actor_array_get(&world->actors, i);
-        actor_free(actor);
+        Actor *actor;
+        if (actor_array_get(world->actors, i, &actor))
+            actor_free(actor);
     }
-    actor_array_free(&world->actors);
+    actor_array_free(world->actors);
     free(world->tiles);
     free(world);
 }
@@ -124,21 +125,24 @@ int world_get_height(const World *world)
 
 void world_add_actor(World *world, Actor *actor)
 {
-    actor_array_push(&world->actors, actor);
+    actor_array_push(world->actors, actor);
 }
 void world_remove_actor(World *world, Actor *actor)
 {
     size_t index = 0;
     bool was_found = false;
 
-    for (size_t i = 0; i < actor_array_get_count(&world->actors); ++i)
+    for (size_t i = 0; i < actor_array_get_count(world->actors); ++i)
     {
-        Actor *_actor = actor_array_get(&world->actors, i);
-        if (_actor == actor)
+        Actor *iter_actor;
+        if (actor_array_get(world->actors, i, &iter_actor))
         {
-            index = i;
-            was_found = true;
-            break;
+            if (iter_actor == actor)
+            {
+                index = i;
+                was_found = true;
+                break;
+            }
         }
     }
 
@@ -147,18 +151,21 @@ void world_remove_actor(World *world, Actor *actor)
         log_fatal("%s: Actor not in array", __func__);
     }
 
-    actor_array_remove(&world->actors, index);
+    actor_array_remove(world->actors, index);
     actor_free(actor);
 }
 
 void world_update_actors(World *world)
 {
-    for (size_t i = 0; i < actor_array_get_count(&world->actors); ++i)
+    for (size_t i = 0; i < actor_array_get_count(world->actors); ++i)
     {
-        Actor *actor = actor_array_get(&world->actors, i);
-        if (actor_get_component(actor, COMPONENT_TYPE_AI))
+        Actor *actor;
+        if (actor_array_get(world->actors, i, &actor))
         {
-            log_message(LOG_LEVEL_INFO, "AI actor takes its turn.");
+            if (actor_get_component(actor, COMPONENT_TYPE_AI))
+            {
+                log_message(LOG_LEVEL_INFO, "AI actor takes its turn.");
+            }
         }
     }
 }
@@ -190,28 +197,34 @@ Command world_actor_attack_actor(
 
 const Actor *world_get_actor_at(const World *world, int x, int y)
 {
-    for (size_t i = 0; i < actor_array_get_count(&world->actors); ++i)
+    for (size_t i = 0; i < actor_array_get_count(world->actors); ++i)
     {
-        const Actor *actor = actor_array_get(&((World *)world)->actors, i);
-        int actor_x, actor_y;
-        actor_get_position(actor, &actor_x, &actor_y);
-        if (actor_x == x && actor_y == y)
+        Actor *actor;
+        if (actor_array_get(((World *)world)->actors, i, &actor))
         {
-            return actor;
+            int actor_x, actor_y;
+            actor_get_position(actor, &actor_x, &actor_y);
+            if (actor_x == x && actor_y == y)
+            {
+                return actor;
+            }
         }
     }
     return NULL;
 }
 Actor *world_get_actor_at_mut(World *world, int x, int y)
 {
-    for (size_t i = 0; i < actor_array_get_count(&world->actors); ++i)
+    for (size_t i = 0; i < actor_array_get_count(world->actors); ++i)
     {
-        Actor *actor = actor_array_get(&world->actors, i);
-        int actor_x, actor_y;
-        actor_get_position(actor, &actor_x, &actor_y);
-        if (actor_x == x && actor_y == y)
+        Actor *actor;
+        if (actor_array_get(world->actors, i, &actor))
         {
-            return actor;
+            int actor_x, actor_y;
+            actor_get_position(actor, &actor_x, &actor_y);
+            if (actor_x == x && actor_y == y)
+            {
+                return actor;
+            }
         }
     }
     return NULL;

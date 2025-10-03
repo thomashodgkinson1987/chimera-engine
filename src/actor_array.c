@@ -22,5 +22,8 @@
 
 #include "actor.h"
 
+// --- Internal Module Definitions ---
+DEFINE_ARRAY_STRUCT(actor, Actor, Actor *)
+
 // --- Public Function Definitions ---
 DEFINE_ARRAY_FUNCTIONS(actor, Actor, Actor *)

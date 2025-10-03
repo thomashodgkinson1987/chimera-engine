@@ -39,7 +39,7 @@ struct actor
     Colour colour;
     char glyph;
     char *name;
-    ComponentArray components;
+    ComponentArray *components;
 };
 
 // --- Static Function Prototypes ---
@@ -87,12 +87,13 @@ Actor *actor_create(int x, int y, char glyph, Colour colour, const char *name)
 }
 void actor_free(Actor *actor)
 {
-    for (size_t i = 0; i < component_array_get_count(&actor->components); ++i)
+    for (size_t i = 0; i < component_array_get_count(actor->components); ++i)
     {
-        Component *component = component_array_get(&actor->components, i);
-        component_free(component);
+        Component *component;
+        if (component_array_get(actor->components, i, &component))
+            component_free(component);
     }
-    component_array_free(&actor->components);
+    component_array_free(actor->components);
 
     free(actor->name);
     free(actor);
@@ -108,7 +109,7 @@ void actor_add_component(Actor *actor, Component *component)
             component_get_name_from_type(component->type));
     }
 
-    component_array_push(&actor->components, component);
+    component_array_push(actor->components, component);
 }
 void actor_remove_component(Actor *actor, ComponentType type)
 {
@@ -122,7 +123,7 @@ void actor_remove_component(Actor *actor, ComponentType type)
             component_get_name_from_type(type));
     }
 
-    component_array_remove(&actor->components, index);
+    component_array_remove(actor->components, index);
 }
 const Component *actor_get_component(const Actor *actor, ComponentType type)
 {
@@ -235,15 +236,17 @@ static const Component *find_component(
     ComponentType type,
     size_t *out_index)
 {
-    for (size_t i = 0; i < component_array_get_count(&actor->components); ++i)
+    for (size_t i = 0; i < component_array_get_count(actor->components); ++i)
     {
-        Component *component = component_array_get(
-            &((Actor *)actor)->components, i);
-        if (component->type == type)
+        Component *component;
+        if (component_array_get(((Actor *)actor)->components, i, &component))
         {
-            if (out_index)
-                *out_index = i;
-            return component;
+            if (component->type == type)
+            {
+                if (out_index)
+                    *out_index = i;
+                return component;
+            }
         }
     }
 
@@ -257,14 +260,17 @@ static Component *find_component_mut(
     ComponentType type,
     size_t *out_index)
 {
-    for (size_t i = 0; i < component_array_get_count(&actor->components); ++i)
+    for (size_t i = 0; i < component_array_get_count(actor->components); ++i)
     {
-        Component *component = component_array_get(&actor->components, i);
-        if (component->type == type)
+        Component *component;
+        if (component_array_get(actor->components, i, &component))
         {
-            if (out_index)
-                *out_index = i;
-            return component;
+            if (component->type == type)
+            {
+                if (out_index)
+                    *out_index = i;
+                return component;
+            }
         }
     }
 

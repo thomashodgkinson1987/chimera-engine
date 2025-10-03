@@ -25,7 +25,7 @@
 typedef struct component Component;
 
 // --- Type Definitions ---
-DECLARE_ARRAY_STRUCT(component, Component, Component *)
+DECLARE_ARRAY_STRUCT(component, Component)
 
 // --- Public Function Prototypes ---
 DECLARE_ARRAY_FUNCTIONS(component, Component, Component *)

@@ -2,7 +2,7 @@
 
 # Chimera Engine
 
-Chimera Engine is a specialized, data-driven, and highly modular C-based framework designed for the creation of procedurally generated, turn-based games with deep, systemic simulation.
+Chimera Engine is a specialised, data-driven, and highly modular C-based framework designed for the creation of procedurally generated, turn-based games with deep, systemic simulation.
 
 ## Core Features
 
@@ -26,21 +26,35 @@ VS Code will automatically build the Docker image and launch a terminal inside t
 
 ### The Manual Way (Native Build)
 
-If you prefer to build on your host machine, you will need to install the following dependencies.
+If you prefer to build on your host machine, you will need to install the necessary toolchain for the engine itself, as well as the libraries required to build its dependencies (primarily Raylib) from source.
 
-**Core Build Tools:**
-*   A C11-compliant compiler (e.g., `gcc`, `clang`)
-*   `cmake` (version 3.10 or higher)
-*   `git`
+**1. Core Development Toolchain**
 
-**Raylib Dependencies:**
-Raylib requires a number of graphics and audio libraries to be installed (e.g., OpenGL, ALSA, and various X11 development libraries on Linux).
+You will need a modern C/C++ development environment. Chimera Engine is written in C17, but its dependencies may require a C++ compiler.
 
-Please consult the official [Raylib wiki](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux) for the correct package names for your specific distribution. For a definitive list of packages used in our reference environment, see the `Dockerfile`.
+*   **C/C++ Compiler Suite:** A compiler supporting C17 (e.g., `gcc`, `clang`, `MSVC`). A C++ compiler is also required by the build process for dependencies (`g++`, `clang++`).
+*   **CMake:** Version 3.10 or higher is required to generate the build files.
+*   **Git:** Required for cloning the repository and its submodules.
+*   **Debugger (Recommended):** A debugger like `gdb` or `lldb` is essential for development.
+
+**2. Raylib Backend Dependencies**
+
+The default rendering and input backend, Raylib, requires a number of system libraries for windowing, graphics, and audio. The exact package names will vary depending on your operating system and distribution.
+
+On a typical Linux system, you will need the development headers for:
+*   OpenGL (`mesa-libGL-devel`)
+*   ALSA (for audio)
+*   X11 (for windowing, including libraries like Xrandr, Xi, Xcursor, etc.)
+
+**For a definitive list of required packages**, please consult the official [Raylib wiki for your OS](https://github.com/raysan5/raylib/wiki/Working-on-GNU-Linux) or, for the exact versions used in our reference environment, refer to the `Dockerfile` in this repository.
 
 ### Building the Engine
 
-*These instructions are for a typical Linux debug build from within the project's root directory.*
+The following instructions assume you are running commands from the project's root directory.
+
+#### For Linux
+
+These steps describe a typical native debug build.
 
 1.  **Configure CMake:**
     ```bash
@@ -51,19 +65,37 @@ Please consult the official [Raylib wiki](https://github.com/raysan5/raylib/wiki
     cmake --build build
     ```
 3.  **Run the executable:**
-    The final executable will be located in a path structured by OS and build type. For this example, you would run:
+    To ensure the application starts in the correct directory to find its assets, use the provided `run` convenience target. This is the recommended way to launch the engine.
     ```bash
-    ./build/Linux/Debug/bin/ChimeraEngine
+    cmake --build build --target run
     ```
+
+#### For Windows (Cross-compiling from Linux)
+
+These steps describe how to build a Windows executable from a Linux environment using the MinGW toolchain.
+
+1.  **Configure CMake:**
+    This command points to a separate build directory and specifies the Windows toolchain file.
+    ```bash
+    cmake -S . -B build/windows -DCMAKE_TOOLCHAIN_FILE=toolchain-windows.cmake -DCMAKE_BUILD_TYPE=Debug
+    ```
+2.  **Build the code:**
+    ```bash
+    cmake --build build/windows
+    ```
+3.  **Run the executable:**
+    The final executable (`ChimeraEngine.exe`) will be located in a path structured by environment and build type (e.g., `build/windows/Windows/Debug/bin/`).
+
+    To run it, you will need to use an environment that can execute Windows binaries, such as Wine on Linux or by transferring the build output to a Windows machine. Note that, like the Linux version, it must be run with the project's root as the working directory to locate assets correctly.
 
 ## For Contributors & Deeper Dives
 
 This project maintains a high standard of internal documentation for developers and contributors. To learn more, please see the following documents:
 
-*   **[Project Overview (`PROJECT-OVERVIEW.md`)]:** The detailed architectural blueprint of the engine.
-*   **[Prophesy (`/.isaiah/PROPHESY.md`)]:** The long-term vision and guiding principles for the project.
-*   **[Style Guide (`STYLE-GUIDE.md`)]:** Our coding and Git contribution standards.
-*   **[Milestones (`MILESTONES.md`)]:** The high-level development roadmap.
+*   **[Project Overview](/.tabernacle/PROJECT-OVERVIEW.md):** The detailed architectural blueprint of the engine.
+*   **[Prophesy](/.isaiah/PROPHESY.md):** The long-term vision and guiding principles for the project.
+*   **[Style Guide](STYLE-GUIDE.md):** Our coding and Git contribution standards.
+*   **[Milestones](MILESTONES.md):** The high-level development roadmap.
 
 ## License
 

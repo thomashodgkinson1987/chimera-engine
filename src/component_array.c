@@ -22,5 +22,8 @@
 
 #include "component.h"
 
+// --- Internal Module Definitions ---
+DEFINE_ARRAY_STRUCT(component, Component, Component *)
+
 // --- Public Function Definitions ---
 DEFINE_ARRAY_FUNCTIONS(component, Component, Component *)

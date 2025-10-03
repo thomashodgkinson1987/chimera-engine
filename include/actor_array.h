@@ -25,7 +25,7 @@
 typedef struct actor Actor;
 
 // --- Type Definitions ---
-DECLARE_ARRAY_STRUCT(actor, Actor, Actor *)
+DECLARE_ARRAY_STRUCT(actor, Actor)
 
 // --- Public Function Prototypes ---
 DECLARE_ARRAY_FUNCTIONS(actor, Actor, Actor *)
